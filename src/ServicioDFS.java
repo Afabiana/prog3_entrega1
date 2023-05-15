@@ -1,6 +1,7 @@
 package src;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -27,29 +28,32 @@ public class ServicioDFS {
 		verticesIt = vertices.keySet().iterator();
 		while(verticesIt.hasNext()) {
 			Integer tmp = verticesIt.next();
-			 if(vertices.get(tmp).equals("blanco"))
-				 resultado.addAll(DFS_Visit(tmp)); //si vertices no puede ir como atributo de clase tocara mandarlo como parametro
+			 if(vertices.get(tmp).equals("blanco")) {
+				 System.out.println(tmp);
+				 resultado.addAll(DFS_Visit(tmp,vertices)); //si vertices no puede ir como atributo de clase tocara mandarlo como parametro
+			 }
 		}
 		// Resolver DFS
+		Collections.reverse(resultado);
 		return resultado;
 	}
 
-	private List<Integer> DFS_Visit(Integer vertice) {
+	private List<Integer> DFS_Visit(Integer vertice, HashMap<Integer, String> vertices ) {
 		List<Integer> resultado = new ArrayList<>();
-		this.vertices.put(vertice,"AMARILLO"); //va a pasar de blanco a amarillo
-	
+		this.vertices.put(vertice,"amarillo"); //va a pasar de blanco a amarillo
+		
 		Iterator<Integer> adyacentes = this.grafo.obtenerAdyacentes(vertice); //traigo el iterador de los adyacentes al vertice
 		
 		while(adyacentes.hasNext()) {
 			Integer ady = adyacentes.next();
+			
 			if(this.vertices.get(ady).equals("blanco")) {
-				DFS_Visit(ady);
-			}else if (vertices.get(ady).equals("AMARILLO")){
+				resultado.addAll(DFS_Visit(ady, vertices));
+			}else if (vertices.get(ady).equals("amarillo")){
 	            System.out.println("Hay ciclo");
 	        }
+			this.vertices.put(vertice,"negro"); //marcar como visitado
 		}
-		
-		this.vertices.put(vertice,"NEGRO"); //marcar como visitado
 		resultado.add(vertice);
 		return resultado;
 	}
