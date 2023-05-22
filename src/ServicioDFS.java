@@ -52,7 +52,7 @@ public class ServicioDFS {
 			}else if (vertices.get(ady).equals("amarillo")){
 	            System.out.println("Hay ciclo");
 	        }
-			this.vertices.put(vertice,"negro"); //marcar como visitado
+			this.vertices.put(vertice,"negro"); //marcar como visitado porque ya recorri sus adyacentes
 		}
 		resultado.add(vertice);
 		return resultado;

@@ -63,8 +63,8 @@ public class probandoTP {
 		
 		grafito.agregarVertice(24, arcos24);
 		
-		ServicioBFS recorrido = new ServicioBFS(grafito);
-		System.out.println(recorrido.bfsForest());
+		ServicioCaminos recorrido = new ServicioCaminos(grafito, 5, 24, 10);
+		System.out.println(recorrido.caminos());
 
 	}
 
