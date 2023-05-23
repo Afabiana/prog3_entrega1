@@ -65,6 +65,12 @@ public class probandoTP {
 		
 		ServicioCaminos recorrido = new ServicioCaminos(grafito, 5, 24, 10);
 		System.out.println(recorrido.caminos());
+		
+		ServicioBFS bfs = new ServicioBFS (grafito);
+		System.out.println(bfs.bfsForest());
+		
+		ServicioDFS dfs = new ServicioDFS(grafito);
+		System.out.println(dfs.dfsForest());
 
 	}
 

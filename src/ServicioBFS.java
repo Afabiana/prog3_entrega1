@@ -40,12 +40,14 @@ public class ServicioBFS {
 
         while (!fila.isEmpty()) {
             Integer actual = fila.remove(0);
+            
             camino.add(actual);
 
             Iterator<Integer> it = grafo.obtenerAdyacentes(actual);
+            
             while (it.hasNext() ) {
             	Integer adyacente = it.next();
-            	System.out.println(adyacente);
+            	
                 if (vertices.get(adyacente).equals("blanco")) {
                 	vertices.put(adyacente, "amarillo");
                     fila.add(adyacente);
