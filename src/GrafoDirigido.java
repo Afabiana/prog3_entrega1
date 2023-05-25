@@ -13,11 +13,6 @@ public class GrafoDirigido<T> implements Grafo<T> {
 		this.vertices = new HashMap<>();
 	}
 	
-	//este metodo se va. Nomas esta para probar y crear vertices rapidos en el main
-	public void agregarVertice(Integer verticeId, ArrayList<Arco<T>> arcos) {
-			vertices.put(verticeId, arcos);
-	}
-	
 	/**
 	* Complejidad: O(1) dado que agregar una entrada 
 	* al hashMap implica un tiempo constante
@@ -31,12 +26,12 @@ public class GrafoDirigido<T> implements Grafo<T> {
 	* Complejidad: O(n * a) donde n es la cantidad total de vertices debido a que debe
 	* recorrer todos los vertices con el for para verificar si existe un arco.
 	* Y "a" es la cantidad total de arcos debido a que se debe recorrer todos los arcos 
-	* en el bluce de arcosList.removeIf CHEQUEAR SI NO USA *
+	* en el bluce de arcosList.removeIf
 	*/
 	@Override
 	public void borrarVertice(int verticeId) {
 		for(ArrayList<Arco<T>> arcosList : this.vertices.values()) {
-				arcosList.removeIf(arco -> arco.getVerticeDestino() == verticeId); //borro todos los arcos que tengan coom destino verticeId
+				arcosList.removeIf(arco -> arco.getVerticeDestino() == verticeId); //borro todos los arcos que tengan como destino verticeId
 		}
 		this.vertices.remove(verticeId);
 	}
@@ -79,13 +74,12 @@ public class GrafoDirigido<T> implements Grafo<T> {
 	/**
 	* De nuevo la complejidad es O(n) donde n es la cantidad de 
 	* arcos del vertice.
-	*  Y en el peor de los casos verticeId1 es adyacente a todos vertices del grafo
 	*/
 	@Override
 	public boolean existeArco(int verticeId1, int verticeId2) {
 		if(vertices.containsKey(verticeId1)&&vertices.containsKey(verticeId2)) {
 			ArrayList<Arco<T>> arcos = this.vertices.get(verticeId1);
-			return arcos.contains(new Arco<T>(verticeId1, verticeId2,null)); //aca tambien tendria que evaluar la etiqueta? o depende del equals de arco? CONSULTAR
+			return arcos.contains(new Arco<T>(verticeId1, verticeId2,null));
 		}
 		return false;
 	}
@@ -99,7 +93,7 @@ public class GrafoDirigido<T> implements Grafo<T> {
 	public Arco<T> obtenerArco(int verticeId1, int verticeId2) {
 		ArrayList<Arco<T>> arcos = this.vertices.get(verticeId1);
 		for(Arco<T> a : arcos) {
-			if(a.getVerticeDestino() == verticeId2) //no tiene sentido chequear el origen porque justamente estoy recorriendo los ady de origen
+			if(a.getVerticeDestino() == verticeId2)
 				return a;
 		}
 		return null;

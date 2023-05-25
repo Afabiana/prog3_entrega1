@@ -1,69 +1,44 @@
 package src;
 
-import java.util.ArrayList;
-
 public class probandoTP {
 
 	public static void main(String[] args) {
 		GrafoDirigido <Integer> grafito = new GrafoDirigido<>();
-		Arco<Integer> arcoA = new Arco<>(5, 3, null);
-		Arco<Integer> arcoB = new Arco<>(5, 1, null);
-		Arco<Integer> arcoC = new Arco<>(5, 8, null);
 		
-		ArrayList<Arco<Integer>> arcos5 = new ArrayList<Arco<Integer>>();
-		arcos5.add(arcoA);
-		arcos5.add(arcoB);
-		arcos5.add(arcoC);
+		//Creo vertices
+		grafito.agregarVertice(5);
+		grafito.agregarVertice(1);
+		grafito.agregarVertice(7);
+		grafito.agregarVertice(2);
+		grafito.agregarVertice(9);
+		grafito.agregarVertice(15);
+		grafito.agregarVertice(23);
+		grafito.agregarVertice(18);
 		
-		grafito.agregarVertice(5, arcos5);
+		//arcos de vertice 5
+		grafito.agregarArco(5, 2, null);
+		grafito.agregarArco(5, 1, null);
+		grafito.agregarArco(5, 18, null);
 		
-		Arco<Integer> arcoD = new Arco<>(1, 3, null);
-		Arco<Integer> arcoE = new Arco<>(1, 11, null);
+		//arcos de vertice 2
+		grafito.agregarArco(2, 7, null);
+		grafito.agregarArco(2, 15, null);
 		
-		ArrayList<Arco<Integer>> arcos1 = new ArrayList<Arco<Integer>>();
-		arcos1.add(arcoD);
-		arcos1.add(arcoE);
+		//Arcos de vertice 7
+		grafito.agregarArco(7, 5, null);
 		
-		grafito.agregarVertice(1, arcos1);
+		//Arcos de vertice 1
+		grafito.agregarArco(1, 9, null);
+		grafito.agregarArco(1, 18, null);
 		
-		Arco<Integer> arcoF = new Arco<>(3, 11, null);
+		//Arcos de vertice 9
+		grafito.agregarArco(9, 23, null);
 		
-		ArrayList<Arco<Integer>> arcos3 = new ArrayList<Arco<Integer>>();
-		arcos3.add(arcoF);
-		
-		grafito.agregarVertice(3, arcos3);
-		
-		Arco<Integer> arcoG = new Arco<>(11, 7, null);
-		Arco<Integer> arcoH = new Arco<>(11, 20, null);
-		
-		ArrayList<Arco<Integer>> arcos11 = new ArrayList<Arco<Integer>>();
-		arcos11.add(arcoG);
-		arcos11.add(arcoH);
-		
-		grafito.agregarVertice(11, arcos11);
-		
-		
-		Arco<Integer> arcoI = new Arco<>(7, 24, null);
-		
-		ArrayList<Arco<Integer>> arcos7 = new ArrayList<Arco<Integer>>();
-		arcos7.add(arcoI);
-		
-		grafito.agregarVertice(7, arcos7);
-		
+		//Arcos de vertice 18
+		grafito.agregarArco(18, 23, null);
 	
-		ArrayList<Arco<Integer>> arcos8 = new ArrayList<Arco<Integer>>();
-		
-		grafito.agregarVertice(8, arcos8);
-		
-		ArrayList<Arco<Integer>> arcos20 = new ArrayList<Arco<Integer>>();
-		
-		grafito.agregarVertice(20, arcos20);
-		
-		ArrayList<Arco<Integer>> arcos24 = new ArrayList<Arco<Integer>>();
-		
-		grafito.agregarVertice(24, arcos24);
-		
-		ServicioCaminos recorrido = new ServicioCaminos(grafito, 5, 24, 10);
+
+		ServicioCaminos recorrido = new ServicioCaminos(grafito, 5, 23, 10);
 		System.out.println(recorrido.caminos());
 		
 		ServicioBFS bfs = new ServicioBFS (grafito);
@@ -71,7 +46,7 @@ public class probandoTP {
 		
 		ServicioDFS dfs = new ServicioDFS(grafito);
 		System.out.println(dfs.dfsForest());
-
+		
 	}
 
 }

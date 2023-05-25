@@ -23,4 +23,14 @@ public class Arco<T> {
 		return this.etiqueta;
 	}
 	
+	public boolean equals(Object o) {
+		try {
+			Arco<T> nuevo=(Arco<T>)o;
+			return nuevo.getVerticeDestino()==this.getVerticeDestino() &&
+				nuevo.getVerticeOrigen()==this.getVerticeOrigen();
+		}catch(Exception e){
+			return false;
+		}
+	}
+	
 }

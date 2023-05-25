@@ -8,34 +8,36 @@ import java.util.List;
 
 public class ServicioBFS {
 	private Grafo<?> grafo;
+	private HashMap<Integer, String> vertices; 
 
     public ServicioBFS(Grafo<?> grafo) {
         this.grafo = grafo;
+        this.vertices = new HashMap<>();
     }
 
     public List<Integer> bfsForest() {
         List<Integer> resultado = new ArrayList<>();
-        HashMap<Integer, String> vertices = new HashMap<>(); //consultar si esto puede ser atributo de clase o rompe con la estructura que se pide
 
         Iterator<Integer> it = grafo.obtenerVertices();
+        
         while (it.hasNext()) {
-        	vertices.put(it.next(), "blanco");
+        	this.vertices.put(it.next(), "blanco");
         }
 
         for (Integer vertice : vertices.keySet()) {
-            if (vertices.get(vertice).equals("blanco")) {
-                resultado.addAll(bfsVisit(vertice, vertices));
+            if (this.vertices.get(vertice).equals("blanco")) {
+                resultado.addAll(bfsVisit(vertice));
             }
         }
 
         return resultado;
     }
 
-    private List<Integer> bfsVisit(Integer inicio, HashMap<Integer, String> vertices) {
+    private List<Integer> bfsVisit(Integer inicio) {
         List<Integer> camino = new ArrayList<>();
         ArrayList<Integer> fila = new ArrayList<>();
 
-        vertices.put(inicio, "amarillo");
+        this.vertices.put(inicio, "amarillo");
         fila.add(inicio);
 
         while (!fila.isEmpty()) {
@@ -48,13 +50,13 @@ public class ServicioBFS {
             while (it.hasNext() ) {
             	Integer adyacente = it.next();
             	
-                if (vertices.get(adyacente).equals("blanco")) {
-                	vertices.put(adyacente, "amarillo");
+                if (this.vertices.get(adyacente).equals("blanco")) {
+                	this.vertices.put(adyacente, "amarillo");
                     fila.add(adyacente);
                 }
             }
 
-            vertices.put(actual, "negro");
+            this.vertices.put(actual, "negro");
         }
 
         return camino;
