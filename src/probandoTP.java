@@ -1,6 +1,10 @@
 package src;
 
-public class probandoTP {
+
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
+public class ProbandoTP {
 
 	public static void main(String[] args) {
 		GrafoDirigido <Integer> grafito = new GrafoDirigido<>();
@@ -46,6 +50,8 @@ public class probandoTP {
 		
 		ServicioDFS dfs = new ServicioDFS(grafito);
 		System.out.println(dfs.dfsForest());
+		
+		
 		
 	}
 
