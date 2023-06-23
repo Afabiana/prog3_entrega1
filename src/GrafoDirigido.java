@@ -5,8 +5,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 
-
-
 public class GrafoDirigido<T> implements Grafo<T> {
 	private HashMap <Integer, ArrayList<Arco<T>>> vertices;
 	
@@ -20,7 +18,9 @@ public class GrafoDirigido<T> implements Grafo<T> {
 	*/
 	@Override
 	public void agregarVertice(int verticeId) {
-		vertices.put(verticeId, new ArrayList<Arco<T>>());
+		if(!vertices.containsKey(verticeId)) {
+			vertices.put(verticeId, new ArrayList<Arco<T>>());
+		}
 	}
 	
 	/**
@@ -47,9 +47,13 @@ public class GrafoDirigido<T> implements Grafo<T> {
 		if(vertices.get(verticeId1) == null) {
 			this.agregarVertice(verticeId1);
 		}
+		if(vertices.get(verticeId2) == null) {
+			this.agregarVertice(verticeId2);
+		}
 		Arco<T> nuevo = new Arco<T>(verticeId1, verticeId2, etiqueta);
-		if(!vertices.get(verticeId1).contains(nuevo))
+		if(!vertices.get(verticeId1).contains(nuevo)) {
 			this.vertices.get(verticeId1).add(nuevo);
+		}
 	}
 
 	
@@ -183,6 +187,18 @@ public class GrafoDirigido<T> implements Grafo<T> {
 			return resultado.iterator();
 	    }
 	    return null;
+	}
+	
+	public String toString() {
+		Iterator<Arco<T>> arcos = this.obtenerArcos();
+		String resultado = "";
+		
+		while(arcos.hasNext()) {
+			Arco<T> arcoActual = arcos.next();
+			resultado += arcoActual + "\n" ; 
+		}
+		
+		return resultado;
 	}
 
 }

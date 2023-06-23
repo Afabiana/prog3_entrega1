@@ -1,8 +1,6 @@
 package src;
 
-
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.util.ArrayList;
 
 public class ProbandoTP {
 
@@ -40,19 +38,37 @@ public class ProbandoTP {
 		
 		//Arcos de vertice 18
 		grafito.agregarArco(18, 23, null);
-	
-
+		System.out.println(grafito);
+		
+		//System.out.println(grafito);
+		grafito.agregarVertice(10);
+		grafito.agregarArco(1, 10, null);
+		grafito.agregarArco(10, 23, null);
+		
+		
+		System.out.println(grafito);
 		ServicioCaminos recorrido = new ServicioCaminos(grafito, 5, 23, 10);
 		System.out.println(recorrido.caminos());
 		
+		/*
 		ServicioBFS bfs = new ServicioBFS (grafito);
 		System.out.println(bfs.bfsForest());
 		
 		ServicioDFS dfs = new ServicioDFS(grafito);
 		System.out.println(dfs.dfsForest());
 		
+		//estaria bueno pedir la ruta por consola
+		CSVReader lector = new CSVReader("src\\datasets\\dataset1.txt");
+		lector.read();
+		GrafoDirigido<Integer> estaciones = lector.cargarGrafo();
 		
+		System.out.println(estaciones);
 		
+		Backtracking tuneles = new Backtracking(estaciones);
+		
+		tuneles.Backtrackingg(new ArrayList<Integer>(), 0, 1);
+		
+		System.out.println(tuneles.solucion); */
 	}
 
 }

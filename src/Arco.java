@@ -33,4 +33,8 @@ public class Arco<T> {
 		}
 	}
 	
+	public String toString() {
+		return "["+this.getVerticeOrigen() +
+				"--("+this.getEtiqueta()+")-->"+this.getVerticeDestino()+"]";
+	}
 }
