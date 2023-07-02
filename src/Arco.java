@@ -1,6 +1,6 @@
 package src;
 
-public class Arco<T> {
+public class Arco<T> implements Comparable<Arco<Integer>>{
 	private int verticeOrigen;
 	private int verticeDestino;
 	private T etiqueta;
@@ -37,4 +37,9 @@ public class Arco<T> {
 		return "["+this.getVerticeOrigen() +
 				"--("+this.getEtiqueta()+")-->"+this.getVerticeDestino()+"]";
 	}
+
+	@Override
+    public int compareTo(Arco<Integer> otroArco) {
+        return Integer.compare((int) otroArco.getEtiqueta(), (int) this.etiqueta);
+    }
 }

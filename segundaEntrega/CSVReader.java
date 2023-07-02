@@ -6,6 +6,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import src.Arco;
+
 public class CSVReader {
 
 	private String path;
@@ -27,24 +29,25 @@ public class CSVReader {
 			Integer destino = Integer.parseInt(line[1].trim().substring(1));
 			Integer etiqueta = Integer.parseInt(line[2].trim());
 			// Aca instanciar lo que necesiten en base a los datos leidos
-			System.out.println("origen:" + origen+ "\n"+
+			/*System.out.println("origen:" + origen+ "\n"+
 								"destino:"+destino+ "\n"+
-								"distancia:"+etiqueta+"\n");
+								"distancia:"+etiqueta+"\n");*/
 		}
 	}
 	
-	public GrafoNoDirigido <Integer> cargarGrafo() {
-		GrafoNoDirigido <Integer> grafo = new GrafoNoDirigido <Integer>();
+	public ArrayList<Arco<Integer>> cargarArcos() {
+		ArrayList<Arco<Integer>> arcos = new ArrayList<>();
 		ArrayList<String[]> lines = this.readContent();
 		
 		for (String[] line: lines) {
 			Integer origen = Integer.parseInt(line[0].trim().substring(1));
 			Integer destino = Integer.parseInt(line[1].trim().substring(1));
 			Integer etiqueta = Integer.parseInt(line[2].trim());
-			grafo.agregarArco(origen, destino, etiqueta);
+			arcos.add(new Arco<Integer>(origen, destino, etiqueta));
+			
 		}
 		
-		return grafo;
+		return arcos;
 	}
 
 	private ArrayList<String[]> readContent() {

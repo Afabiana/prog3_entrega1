@@ -1,82 +1,93 @@
 package segundaEntrega;
-
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 
 import src.Arco;
 
 public class Greedy {
-	private GrafoNoDirigido<Integer> estaciones;
-	private Integer [] distancias;
-	private Integer [] padres;
-	ArrayList<Arco<Integer>> solucion;
-	int iteraciones;
-	private ArrayList<Integer> visitados;
-	
-	public Greedy(GrafoNoDirigido<Integer> grafo) {
-		this.estaciones = grafo;
-		this.distancias = new Integer [grafo.cantidadVertices()+1];
-		this.padres = new Integer [grafo.cantidadVertices()+1];
-		this.visitados = new ArrayList<>();
-		this.solucion = new ArrayList<>();
-		iteraciones = 0;
-	}
+    private ArrayList<Arco<Integer>> solucion;
+    int cantidadMts;
+    ArrayList<Arco<Integer>> arcos;
+    int cantidadEstaciones;
+    ArrayList<Integer> vertices;
+    UnionFind union;
+    int [] distancias;
+    GrafoNoDirigido<Integer> grafo;
+    
+    public Greedy(ArrayList<Arco<Integer>> arcos) {
+    	this.arcos = arcos;
+    	this.vertices = new ArrayList<Integer>();
+    	this.grafo = new GrafoNoDirigido<>();
+    	cargarGrafo();
+        this.solucion = new ArrayList<>();
+        this.cantidadMts = 0;
+        this.union = new UnionFind(grafo.cantidadVertices() + 1);
+        
+    }
 
-	public void dijkstra() {
-	    this.inicializarEstadoVertices();
-	    Integer actual = getPrimerVertice();
-	    
-	    while (!visitados.contains(actual) && this.visitados.size() < this.estaciones.cantidadVertices()) {
-	        Iterator<Arco<Integer>> iterador = estaciones.obtenerArcos(actual);
-	        iteraciones++;
-	        
-	        while (iterador.hasNext()) {
-	        	iteraciones++;
-	            Arco<Integer> arco = iterador.next();
-	            Integer distancia = arco.getEtiqueta();
-	            Integer adyacente = arco.getVerticeDestino();
-	            
-	            if (!visitados.contains(adyacente) && distancias[actual] + distancia < distancias[adyacente]) {
-	            	//elimino si existe ya un arco que me lleve a ese vertice
-	                solucion.removeIf(arcoB -> arcoB.getVerticeDestino() == adyacente);
-	                solucion.add(arco);
-	                //actualizo el padre y la distancia hacia ese vertice
-	                distancias[adyacente] = distancias[actual] + distancia;
-	                padres[adyacente] = actual;
-	            }
-	        }
-	        visitados.add(actual);
-	        actual = getVerticeMasCercano();
-	    }
-	}
-	
-	private void inicializarEstadoVertices() {
-		for(int i=0; i<this.distancias.length; i++) {
-			this.distancias[i] = Integer.MAX_VALUE;
+    private void cargarGrafo() {
+		for(Arco<Integer> arco : this.arcos) {
+			if(!vertices.contains(arco.getVerticeOrigen())) {
+				vertices.add(arco.getVerticeOrigen());
+			}
+			if(!vertices.contains(arco.getVerticeDestino())) {
+				vertices.add(arco.getVerticeDestino());
+			}
+			this.grafo.agregarArco(arco.getVerticeOrigen(), arco.getVerticeDestino(), arco.getEtiqueta());
 		}
-		for(int i=0; i<padres.length; i++) {
-			this.padres[i] = null;
-		}
-		
 	}
-	
-	private Integer getPrimerVertice() {
-		Iterator<Integer> it = this.estaciones.obtenerVertices();
-		System.out.println(it.next());
-		return it.next();
-	}
-	
-	private Integer getVerticeMasCercano() {
-		int minDistancia = Integer.MAX_VALUE;
-        int minVertice = -1;
+    
+    public ArrayList<Arco<Integer>> greedy() {
+        ArrayList<Integer> visitados = new ArrayList<>();
+        System.out.println(vertices);
+        
+        Integer origen = vertices.get(0);
+        visitados.add(origen);
 
-        for (int i = 0; i < distancias.length; i++) {
-            if (!visitados.contains(i) && distancias[i] < minDistancia) {
-                minDistancia = distancias[i];
-                minVertice = i;
+        
+        while (visitados.size() < grafo.cantidadVertices()) {
+        	Arco<Integer> mejorArco = encontrarMejorArco(visitados, origen);
+        	
+            if (mejorArco != null) {
+                
+                solucion.add(mejorArco);
+                this.cantidadMts += mejorArco.getEtiqueta();
+                this.union.unir(mejorArco.getVerticeOrigen(), mejorArco.getVerticeDestino());
+                int v1 = mejorArco.getVerticeOrigen();
+                int v2 = mejorArco.getVerticeDestino();
+                int nuevoVertice = visitados.contains(v1) ? v2 : v1;
+                visitados.add(nuevoVertice);
+                origen = nuevoVertice;
             }
         }
 
-        return minVertice;
+        if(union.todosConectados())
+        	return solucion;
+        
+        return null;
+    }
+
+	private Arco<Integer> encontrarMejorArco(ArrayList<Integer> visitados, Integer origen) {
+        int menorDistancia = Integer.MAX_VALUE;
+        Arco<Integer> mejorArco = null;
+
+        for (Arco<Integer> arco : arcos) {
+            int v1 = arco.getVerticeOrigen();
+            int v2 = arco.getVerticeDestino();
+
+            if ((visitados.contains(v1) && !visitados.contains(v2)) ||
+                (visitados.contains(v2) && !visitados.contains(v1))) {
+                int distancia = arco.getEtiqueta();
+
+                if (distancia < menorDistancia) {
+                    menorDistancia = distancia;
+                    mejorArco = arco;
+                }
+            }
+        }
+        
+        return mejorArco;
 	}
+
 }

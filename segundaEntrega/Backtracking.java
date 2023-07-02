@@ -7,12 +7,12 @@ import java.util.Set;
 import src.Arco;
 
 public class Backtracking {
-	GrafoNoDirigido<Integer> estaciones;
-	ArrayList<Arco<Integer>> solucion;
-	Set <Integer> visitados;
-	int menorCantidadMts;
-	int cantEstaciones;
-	int iteraciones;
+	private GrafoNoDirigido<Integer> estaciones;
+	private ArrayList<Arco<Integer>> solucion;
+	private Set <Integer> visitados;
+	private int menorCantidadMts;
+	private int cantEstaciones;
+	private int iteraciones;
 	
 	public Backtracking(GrafoNoDirigido<Integer> grafo) {
 		this.menorCantidadMts = Integer.MAX_VALUE;
@@ -24,33 +24,66 @@ public class Backtracking {
 	}
 	
 
-    public ArrayList<Arco<Integer>> backtracking(Integer estacion, ArrayList<Arco<Integer>> posibleSolucion , int cantMetrosActual) {
-    	iteraciones++;
-        visitados.add(estacion); 
-    	if (visitados.size() == this.cantEstaciones) {
-            if (cantMetrosActual < this.menorCantidadMts) {
-                menorCantidadMts = cantMetrosActual;
-                solucion.clear();
-                solucion.addAll(new ArrayList<>(posibleSolucion));
-            }
-        } else { //sigo recorriendo el arbol
-        	Iterator<Arco<Integer>> it = this.estaciones.obtenerArcos();
-        	while(it.hasNext()) {
-        		Arco<Integer> arco = it.next();
-        		Integer v1 = arco.getVerticeDestino();
-        		Integer distancia = arco.getEtiqueta();
-        		//si aun no agregue el arco && aun no tengo un arco que me lleve a v1
-        		if(!posibleSolucion.contains(arco) && !visitados.contains(v1)) {
-        			cantMetrosActual += distancia;
-        			posibleSolucion.add(arco);
-        			backtracking(v1, posibleSolucion, cantMetrosActual);
-        			posibleSolucion.remove(posibleSolucion.size()-1);
-        			cantMetrosActual -= distancia;
-        		}
-        	}
-        }
-    	visitados.remove(estacion);
-        return this.solucion;
-    }
+	public ArrayList<Arco<Integer>> backtracking(Integer estacion, ArrayList<Arco<Integer>> posibleSolucion, int cantMetrosActual) {
+	    iteraciones++;
+	    visitados.add(estacion);
+
+	    if (visitados.size() == this.cantEstaciones) {
+	        // Verificar si todos los vértices están conectados
+	        if (verificarConectividad(posibleSolucion)) {
+	            if (cantMetrosActual < this.menorCantidadMts) {
+	                menorCantidadMts = cantMetrosActual;
+	                solucion.clear();
+	                solucion.addAll(new ArrayList<>(posibleSolucion));
+	                
+	            }
+	        }
+	    } else { // Sigo recorriendo el árbol
+	        Iterator<Arco<Integer>> it = this.estaciones.obtenerArcos();
+	        while (it.hasNext()) {
+	            Arco<Integer> arco = it.next();
+	            Integer v1 = arco.getVerticeDestino();
+	            Integer distancia = arco.getEtiqueta();
+
+	            // Si aún no agregué el arco y aún no visité v1
+	            if (!posibleSolucion.contains(arco) && !visitados.contains(v1)) {
+	                cantMetrosActual += distancia;
+	                posibleSolucion.add(arco);
+	                backtracking(v1, posibleSolucion, cantMetrosActual);
+	                posibleSolucion.remove(posibleSolucion.size() - 1);
+	                cantMetrosActual -= distancia;
+	            }
+	        }
+	    }
+
+	    visitados.remove(estacion);
+	    return this.solucion;
+	}
+
+	public boolean verificarConectividad(ArrayList<Arco<Integer>> solucion) {
+	    HashSet<Integer> verticesVisitados = new HashSet<>();
+	    for (Arco<Integer> arco : solucion) {
+	        verticesVisitados.add(arco.getVerticeOrigen());
+	        verticesVisitados.add(arco.getVerticeDestino());
+	    }
+	    return verticesVisitados.size() == this.cantEstaciones;
+	}
+
+    
+	public int getCantIteraciones() {
+		return this.iteraciones;
+	}
+	
+	public int getMenorCantidadMts() {
+		return this.menorCantidadMts;
+	}
+	
+	private boolean noEsInverso(Arco<Integer> a) {
+		Arco<Integer> arcoInverso = new Arco<Integer>(a.getVerticeDestino(), a.getVerticeOrigen(), null);
+			return a.getVerticeDestino() == arcoInverso.getVerticeOrigen() &&
+					a.getVerticeOrigen() == arcoInverso.getVerticeDestino();
+	}
+	
+	//establezco una conexion. Una vez que estableci la conexion tengo que buscar otro arco que tenga como destino el mismo destino anterior
 	
 }
