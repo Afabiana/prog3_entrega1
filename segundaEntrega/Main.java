@@ -26,7 +26,6 @@ public class Main {
 		System.out.println(back.construirMenorCantidadMts(arcos));
 		System.out.println(back.getCantidadMts() + " kms");
 		System.out.println("cantidad de iteraciones: " + back.getIteraciones());
-		//System.out.println(invento.iteraciones);
 		
 		Greedy greedy = new Greedy(arcos);
 		System.out.println("Greedy");
@@ -34,8 +33,7 @@ public class Main {
 		System.out.println(greedy.getMenorCantidadMts()+ " kms");
 		System.out.println("cantidad de iteraciones: " + greedy.getCantIteraciones());
 		
-		/*System.out.println(tuneles.getMenorCantidadMts());
-		System.out.println(greedy.getMenorCantidadMts());*/
+		
 		
 	}
 
