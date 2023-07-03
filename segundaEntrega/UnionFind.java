@@ -65,14 +65,14 @@ public class UnionFind {
    
 
     public boolean todosConectados() {
-        int root = encontrar(1); // Suponemos que el elemento 1 es la raíz de referencia
+        int root = encontrar(1); 
        
         for (int i = 2; i < padre.length; i++) {
             if (encontrar(i) != root) {
-                return false; // Si algún elemento no está conectado a la raíz, retornamos false
+                return false; 
             }
         }
-        return true; // Todos los elementos están conectados a la raíz
+        return true;
     }
     
     public boolean estaConectada(int x) {

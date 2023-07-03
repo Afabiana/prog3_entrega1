@@ -1,5 +1,5 @@
 package segundaEntrega;
-import src.GrafoDirigido;
+import primeraEntrega.GrafoDirigido;
 
 public class GrafoNoDirigido<T> extends GrafoDirigido<T> {
   //borro de ida y de vuelta

@@ -1,4 +1,4 @@
-package src;
+package primeraEntrega;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -7,9 +7,11 @@ import java.util.Iterator;
 
 public class GrafoDirigido<T> implements Grafo<T> {
 	private HashMap <Integer, ArrayList<Arco<T>>> vertices;
+	private int cantidadVertices;
 	
 	public GrafoDirigido () {
 		this.vertices = new HashMap<>();
+		this.cantidadVertices = 0;
 	}
 	
 	/**
@@ -20,6 +22,7 @@ public class GrafoDirigido<T> implements Grafo<T> {
 	public void agregarVertice(int verticeId) {
 		if(!vertices.containsKey(verticeId)) {
 			vertices.put(verticeId, new ArrayList<Arco<T>>());
+			this.cantidadVertices++;
 		}
 	}
 	
@@ -35,6 +38,7 @@ public class GrafoDirigido<T> implements Grafo<T> {
 				arcosList.removeIf(arco -> arco.getVerticeDestino() == verticeId); //borro todos los arcos que tengan como destino verticeId
 		}
 		this.vertices.remove(verticeId);
+		this.cantidadVertices--;
 	}
 
 	/**
@@ -58,8 +62,9 @@ public class GrafoDirigido<T> implements Grafo<T> {
 
 	
 	/**
-	* Complejidad: O(n) donde n es la cantidad de arcos del vertice debido a que hay que
-	* recorrer los arcos del vertice para saber si cumple con la condicion en el removeIf
+	* Complejidad: O(n) donde n es la cantidad de arcos del vertice origen que se desea borrar
+	*  debido a que hay que recorrer los arcos del vertice para saber si cumple
+	*  con la condicion en el removeIf
 	*/
 	@Override
 	public void borrarArco(int verticeId1, int verticeId2) {
@@ -80,7 +85,7 @@ public class GrafoDirigido<T> implements Grafo<T> {
 
 	/**
 	* De nuevo la complejidad es O(n) donde n es la cantidad de 
-	* arcos del vertice.
+	* arcos del vertice origen. En este caso verticeId1
 	*/
 	@Override
 	public boolean existeArco(int verticeId1, int verticeId2) {
@@ -93,7 +98,7 @@ public class GrafoDirigido<T> implements Grafo<T> {
 
 	/**
 	* Complejidad: O(n) donde n es la cantidad de 
-	* arcos del vertice ya que en el peor de los casos se recorrera
+	* arcos del verticeId1 ya que en el peor de los casos se recorrera
 	* la totalidad de los arcos del vertice
 	*/
 	@Override
@@ -112,11 +117,11 @@ public class GrafoDirigido<T> implements Grafo<T> {
 	*/
 	@Override
 	public int cantidadVertices() {
-		return  this.vertices.size();
+		return  this.cantidadVertices;
 	}
 
 	/**
-	* Complejidad: O(n + 1) donde n es la cantidad de vertices y 1
+	* Complejidad: O(n + 1) donde n es la cantidad total de vertices y 1
 	* es la complejidad que implica acceder al tamaño del array listaDeArcos
 	*/
 	@Override
@@ -189,6 +194,11 @@ public class GrafoDirigido<T> implements Grafo<T> {
 	    return null;
 	}
 	
+	/*
+	 * complejidad o(a) donde a es la cantidad de arcos del grafo
+	 * dado que se recorrer la totalidad de los arcos en el while
+	 * 
+	*/
 	public String toString() {
 		Iterator<Arco<T>> arcos = this.obtenerArcos();
 		String resultado = "";

@@ -1,19 +1,16 @@
 package segundaEntrega;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
 
-import src.Arco;
+import primeraEntrega.Arco;
 
 public class Greedy {
     private ArrayList<Arco<Integer>> solucion;
-    int cantidadMts;
-    ArrayList<Arco<Integer>> arcos;
-    int cantidadEstaciones;
-    ArrayList<Integer> vertices;
-    UnionFind union;
-    int [] distancias;
-    GrafoNoDirigido<Integer> grafo;
+    private int cantidadMts;
+    private ArrayList<Arco<Integer>> arcos;
+    private ArrayList<Integer> vertices;
+    private UnionFind union;
+    private GrafoNoDirigido<Integer> grafo;
+    private int iteraciones;
     
     public Greedy(ArrayList<Arco<Integer>> arcos) {
     	this.arcos = arcos;
@@ -23,7 +20,16 @@ public class Greedy {
         this.solucion = new ArrayList<>();
         this.cantidadMts = 0;
         this.union = new UnionFind(grafo.cantidadVertices() + 1);
+        this.iteraciones = 0;
         
+    }
+    
+    public int getCantIteraciones() {
+    	return this.iteraciones;
+    }
+    
+    public int getMenorCantidadMts() {
+    	return this.cantidadMts;
     }
 
     private void cargarGrafo() {
@@ -40,13 +46,13 @@ public class Greedy {
     
     public ArrayList<Arco<Integer>> greedy() {
         ArrayList<Integer> visitados = new ArrayList<>();
-        System.out.println(vertices);
         
         Integer origen = vertices.get(0);
         visitados.add(origen);
 
         
         while (visitados.size() < grafo.cantidadVertices()) {
+        	this.iteraciones++;
         	Arco<Integer> mejorArco = encontrarMejorArco(visitados, origen);
         	
             if (mejorArco != null) {
@@ -68,6 +74,8 @@ public class Greedy {
         return null;
     }
 
+    
+    //o(n) siendo n la cantidad de arcos.
 	private Arco<Integer> encontrarMejorArco(ArrayList<Integer> visitados, Integer origen) {
         int menorDistancia = Integer.MAX_VALUE;
         Arco<Integer> mejorArco = null;

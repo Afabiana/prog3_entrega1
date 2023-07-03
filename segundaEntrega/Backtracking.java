@@ -1,89 +1,115 @@
 package segundaEntrega;
 
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
-import src.Arco;
 
-public class Backtracking {
-	private GrafoNoDirigido<Integer> estaciones;
-	private ArrayList<Arco<Integer>> solucion;
-	private Set <Integer> visitados;
-	private int menorCantidadMts;
-	private int cantEstaciones;
-	private int iteraciones;
-	
-	public Backtracking(GrafoNoDirigido<Integer> grafo) {
-		this.menorCantidadMts = Integer.MAX_VALUE;
-		this.estaciones = grafo;
-		this.visitados = new HashSet<Integer>();
-		this.solucion = new ArrayList<Arco<Integer>>();
-		this.cantEstaciones = this.estaciones.cantidadVertices();
-		this.iteraciones=0;
-	}
-	
+import primeraEntrega.Arco;
 
-	public ArrayList<Arco<Integer>> backtracking(Integer estacion, ArrayList<Arco<Integer>> posibleSolucion, int cantMetrosActual) {
-	    iteraciones++;
-	    visitados.add(estacion);
-
-	    if (visitados.size() == this.cantEstaciones) {
-	        // Verificar si todos los vértices están conectados
-	        if (verificarConectividad(posibleSolucion)) {
-	            if (cantMetrosActual < this.menorCantidadMts) {
-	                menorCantidadMts = cantMetrosActual;
-	                solucion.clear();
-	                solucion.addAll(new ArrayList<>(posibleSolucion));
-	                
-	            }
-	        }
-	    } else { // Sigo recorriendo el árbol
-	        Iterator<Arco<Integer>> it = this.estaciones.obtenerArcos();
-	        while (it.hasNext()) {
-	            Arco<Integer> arco = it.next();
-	            Integer v1 = arco.getVerticeDestino();
-	            Integer distancia = arco.getEtiqueta();
-
-	            // Si aún no agregué el arco y aún no visité v1
-	            if (!posibleSolucion.contains(arco) && !visitados.contains(v1)) {
-	                cantMetrosActual += distancia;
-	                posibleSolucion.add(arco);
-	                backtracking(v1, posibleSolucion, cantMetrosActual);
-	                posibleSolucion.remove(posibleSolucion.size() - 1);
-	                cantMetrosActual -= distancia;
-	            }
-	        }
-	    }
-
-	    visitados.remove(estacion);
-	    return this.solucion;
-	}
-
-	public boolean verificarConectividad(ArrayList<Arco<Integer>> solucion) {
-	    HashSet<Integer> verticesVisitados = new HashSet<>();
-	    for (Arco<Integer> arco : solucion) {
-	        verticesVisitados.add(arco.getVerticeOrigen());
-	        verticesVisitados.add(arco.getVerticeDestino());
-	    }
-	    return verticesVisitados.size() == this.cantEstaciones;
-	}
-
+public class Backtracking{
+    private ArrayList<Arco<Integer>> solucion;
+    private int menorCantidadMts;
+    private ArrayList<Arco<Integer>> arcosDisponibles;
+    private UnionFind union;
+    private int iteraciones;
+    private int cantidadEstaciones;
     
-	public int getCantIteraciones() {
+    public Backtracking() {
+    	this.solucion = new ArrayList<Arco<Integer>>();
+    	this.menorCantidadMts = Integer.MAX_VALUE;
+    	this.arcosDisponibles =  new ArrayList<Arco<Integer>>();
+    	this.iteraciones = 0;
+    }
+
+    public int getIteraciones() {
 		return this.iteraciones;
 	}
+    
+    public int getCantidadMts() {
+    	return this.menorCantidadMts;
+    }
+    
+    public ArrayList<Arco<Integer>> construirMenorCantidadMts(ArrayList<Arco<Integer>> arcosDisponibles) {
+    	Timer timer = new Timer();
+    	timer.start();
+    	
+    	this.arcosDisponibles = arcosDisponibles;
+    	cargarVertices(arcosDisponibles);
+    	this.union = new UnionFind(this.cantidadEstaciones+1);
+        backtracking(new ArrayList<Arco<Integer>>(), 0 );
+        
+        
+        System.out.println("tiempo en milisegundos: "+ timer.stop());
+        
+        return solucion;
+    }
+
+
+	private void backtracking(ArrayList<Arco<Integer>> solucionParcial, int cantMtsActual) {
+		this.iteraciones ++;
+        if (this.union.todosConectados()) {
+            if (cantMtsActual < menorCantidadMts) {
+            	menorCantidadMts = cantMtsActual;
+            	this.solucion.clear();
+            	this.solucion.addAll(new ArrayList<>(solucionParcial));
+            	
+            }
+        } else {
+        	Arco<Integer> arcoActual = arcosDisponibles.remove(0);
+        
+        	//se decide no usar el arco en la solucion 
+        	if(!this.arcosDisponibles.isEmpty()&&!solucionParcial.contains(arcoActual)) {
+				backtracking(solucionParcial, cantMtsActual);
+			}
+            
+            
+            //se decide usar el arco en la solucion siempre y cuando sea factible
+            if(solucionParcial.size() < this.cantidadEstaciones) {
+            	Integer v1 = arcoActual.getVerticeOrigen();
+        		Integer v2 = arcoActual.getVerticeDestino();
+        		int distancia = arcoActual.getEtiqueta();
+            	if(cantMtsActual + distancia < menorCantidadMts) {
+            		if(!solucionParcial.contains(arcoActual)&&
+            				!this.union.estanConectadas(v1, v2)) { 
+            			
+            			cantMtsActual += distancia;
+            			solucionParcial.add(arcoActual);
+            			UnionFind old_uf = new UnionFind(this.union);
+            			union.unir(v1, v2);
+            			
+            			if(!this.arcosDisponibles.isEmpty()) {
+            				
+            				backtracking(solucionParcial, cantMtsActual);
+            			}
+            			this.union = old_uf;
+            			cantMtsActual -= distancia;
+            			solucionParcial.remove(arcoActual);
+            		}
+            	}
+        	}
+            
+            arcosDisponibles.add(arcoActual);
+        }
+    }
 	
-	public int getMenorCantidadMts() {
-		return this.menorCantidadMts;
+	private void cargarVertices(ArrayList<Arco<Integer>> arcos) {
+		ArrayList<Integer> vertices = new ArrayList<Integer>();
+		
+		for (Arco<Integer> arco : arcos) {
+            int verticeOrigen = arco.getVerticeOrigen();
+            int verticeDestino = arco.getVerticeDestino();
+
+            if (!vertices.contains(verticeOrigen)) {
+            	vertices.add(verticeOrigen);
+                this.cantidadEstaciones++;
+            }
+
+            if (!vertices.contains(verticeDestino)) {
+            	vertices.add(verticeDestino);
+            	this.cantidadEstaciones++;
+            }
+        }
+		
 	}
-	
-	private boolean noEsInverso(Arco<Integer> a) {
-		Arco<Integer> arcoInverso = new Arco<Integer>(a.getVerticeDestino(), a.getVerticeOrigen(), null);
-			return a.getVerticeDestino() == arcoInverso.getVerticeOrigen() &&
-					a.getVerticeOrigen() == arcoInverso.getVerticeDestino();
-	}
-	
-	//establezco una conexion. Una vez que estableci la conexion tengo que buscar otro arco que tenga como destino el mismo destino anterior
-	
+
+ 
 }
+

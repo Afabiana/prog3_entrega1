@@ -6,7 +6,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import src.Arco;
+import primeraEntrega.Arco;
 
 public class CSVReader {
 
@@ -29,9 +29,9 @@ public class CSVReader {
 			Integer destino = Integer.parseInt(line[1].trim().substring(1));
 			Integer etiqueta = Integer.parseInt(line[2].trim());
 			// Aca instanciar lo que necesiten en base a los datos leidos
-			/*System.out.println("origen:" + origen+ "\n"+
+			System.out.println("origen:" + origen+ "\n"+
 								"destino:"+destino+ "\n"+
-								"distancia:"+etiqueta+"\n");*/
+								"distancia:"+etiqueta+"\n");
 		}
 	}
 	

@@ -1,4 +1,4 @@
-package src;
+package primeraEntrega;
 
 public class Arco<T> implements Comparable<Arco<Integer>>{
 	private int verticeOrigen;
